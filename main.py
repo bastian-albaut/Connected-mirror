@@ -60,22 +60,18 @@ threshold = 10
 
 def light():
     try:
-        # Get sensor value
+        # Récupérer l'humidité pour ajouter la pluie
+        # Pour récupérer le levé/couché du soleil
+        # https://github.com/SatAgro/suntime
+        # Pour récupérer latitude / longitude:
+        # https://developers.google.com/maps/documentation/geocoding/overview
+
         sensor_value = grovepi.analogRead(light_sensor)
 
-        # Calculate resistance of sensor in K
-        resistance = (float)(1023 - sensor_value) * 10 / sensor_value
-
-        if resistance > threshold:
-            # Send HIGH to switch on LED
-            grovepi.digitalWrite(led, 1)
+        if(sensor_value > 15000 or (sensor_value > 350 and "levé ou couché du soleil")):
+            return "Soleil"
         else:
-            # Send LOW to switch off LED
-            grovepi.digitalWrite(led, 0)
-
-        # print("sensor_value = %d resistance = %.2f" %
-        #       (sensor_value,  resistance))
-        return sensor_value
+            return "Nuage"
 
     except IOError:
         print("Error")
@@ -102,18 +98,20 @@ def buttonDetection():
 
 def main():
     if(movementDetection()):
-        # tempAndHum = temperatureAndHumidity()
-        # temp = tempAndHum[0]
-        # hum = tempAndHum[1]
-        # print("temp = %.02f C humidity = %.02f%%" % (temp, hum))
-        sensor_value = light()
-        print("sensor_value = " + str(sensor_value))
-        # print("sensor_value = %d resistance = %.2f" %
-        #   (sensor_value,  resistance))
+        while(True):
+            # tempAndHum = temperatureAndHumidity()
+            # temp = tempAndHum[0]
+            # hum = tempAndHum[1]
+            # print("temp = %.02f C humidity = %.02f%%" % (temp, hum))
+            sensor_value = light()
+            print("sensor_value = " + str(sensor_value))
+            # print("sensor_value = %d resistance = %.2f" %
+            #   (sensor_value,  resistance))
 
-        # if(buttonDetection()) {
-        #     Changer l'affichage du lcd
-        # }
+            # if(buttonDetection2()) { 2eme boutton poussoire
+            #     Changer l'affichage du lcd
+            # }
+            time.sleep(30)
 
 
 main()
