@@ -1,12 +1,12 @@
 import grovepi
 import time
+import math
 
 # set I2C to use the hardware bus
 grovepi.set_bus("RPI_1")
 
-# Connect the Grove Ultrasonic Ranger to digital port D3
-# SIG,NC,VCC,GND
-ultrasonic_ranger = 3
+ultrasonic_ranger = 3  # The Ultrasonic Ranger goes on digital port D3
+sensor = 2  # The Sensor goes on digital port D2
 
 
 def distance():
@@ -27,5 +27,32 @@ def MovementDetection():
         if(abs(dist1-dist2) > 25):
             mvtDetected = True
         time.sleep(0.1)  # don't overload the i2c bus
+    return True
 
-MovementDetection()
+
+# temp_humidity_sensor_type
+# Grove Base Kit comes with the blue sensor.
+blue = 0    # The Blue colored sensor.
+white = 1   # The White colored sensor.
+
+
+def temperatureAndHumidity():
+    try:
+        # This example uses the blue colored sensor.
+        # The first parameter is the port, the second parameter is the type of sensor.
+        [temp, humidity] = grovepi.dht(sensor, blue)
+        if math.isnan(temp) == False and math.isnan(humidity) == False:
+            return [temp, humidity]
+    except IOError:
+        print("Error")
+
+
+def main():
+    if(MovementDetection()):
+        tempAndHum = temperatureAndHumidity()
+        temp = tempAndHum[0]
+        hum = tempAndHum[1]
+        print("temp = %.02f C humidity = %.02f%%" % (temp, hum))
+
+
+main()
