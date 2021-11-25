@@ -1,58 +1,31 @@
-import RPi.GPIO as GPIO
+import grovepi
 import time
 
-#GPIO Mode (BOARD / BCM)
-GPIO.setmode(GPIO.BCM)
+# set I2C to use the hardware bus
+grovepi.set_bus("RPI_1")
 
-#set GPIO Pins
-GPIO_TRIGGER = 18
-GPIO_ECHO = 24
- 
-#set GPIO direction (IN / OUT)
-GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
-GPIO.setup(GPIO_ECHO, GPIO.IN)
- 
+# Connect the Grove Ultrasonic Ranger to digital port D3
+# SIG,NC,VCC,GND
+ultrasonic_ranger = 3
+
+
 def distance():
-    # set Trigger to HIGH
-    GPIO.output(GPIO_TRIGGER, True)
- 
-    # set Trigger after 0.01ms to LOW
-    time.sleep(0.00001)
-    GPIO.output(GPIO_TRIGGER, False)
- 
-    StartTime = time.time()
-    StopTime = time.time()
- 
-    # save StartTime
-    while GPIO.input(GPIO_ECHO) == 0:
-        StartTime = time.time()
- 
-    # save time of arrival
-    while GPIO.input(GPIO_ECHO) == 1:
-        StopTime = time.time()
- 
-    # time difference between start and arrival
-    TimeElapsed = StopTime - StartTime
-    # multiply with the sonic speed (34300 cm/s)
-    # and divide by 2, because there and back
-    distance = (TimeElapsed * 34300) / 2
- 
-    return distance
- 
-if __name__ == '__main__':
     try:
-        dist1 = distance()
-        
-        while not mvtDetected:
-            dist2 = distance()
+        # Read distance value from Ultrasonic
+        return grovepi.ultrasonicRead(ultrasonic_ranger)
 
-            if(dist1!=dist2):
-                mvtDetected = True
+    except Exception as e:
+        print("Error:{}".format(e))
 
-            print ("Measured Distance = %.1f cm" % dist)
-            time.sleep(1) # a modif
- 
-        # Reset by pressing CTRL + C
-    # except KeyboardInterrupt:
-    #     print("Measurement stopped by User")
-    #     GPIO.cleanup()
+
+def MovementDetection():
+    mvtDetected = False
+    dist1 = distance()
+    while not mvtDetected:
+        dist2 = distance()
+        print("Distance mesurée = %.1f cm" % dist2)
+        if(abs(dist1-dist2) > 25):
+            mvtDetected = True
+        time.sleep(0.1)  # don't overload the i2c bus
+
+MovementDetection()
