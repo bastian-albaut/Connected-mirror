@@ -89,7 +89,7 @@ def buttonDetection():
     btnState = pushButton()
     while not btnDetected:
         btnState2 = pushButton()
-        print("Etat du bouton = " + str(btnState2))
+        print("Etat du bouton = %d" % btnState2)
         if btnState2 != btnState:
             btnDetected = True
         time.sleep(0.5)  # don't overload the i2c bus
@@ -104,7 +104,7 @@ def main():
             # hum = tempAndHum[1]
             # print("temp = %.02f C humidity = %.02f%%" % (temp, hum))
             sensor_value = light()
-            print("sensor_value = " + str(sensor_value))
+            print("sensor_value = %d" % sensor_value)
             # print("sensor_value = %d resistance = %.2f" %
             #   (sensor_value,  resistance))
 
