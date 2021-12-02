@@ -81,7 +81,7 @@ def getSunriseSunset():
     #   format(today_sr.strftime('%H:%M'), today_ss.strftime('%H:%M')))
 
 def isSunrise(sunrise):
-    
+
 
 def isSunset(sunset):
 
@@ -115,7 +115,7 @@ def buttonDetection():
     btnState = pushButton()
     while not btnDetected:
         btnState2 = pushButton()
-        print("Etat du bouton = " + str(btnState2))
+        print("Etat du bouton = %d" % btnState2)
         if btnState2 != btnState:
             btnDetected = True
         time.sleep(0.5)  # don't overload the i2c bus
