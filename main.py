@@ -5,6 +5,7 @@ import datetime
 from suntime import Sun, SunTimeException
 import requests
 from driverI2C import *
+import pytz
 
 
 # set I2C to use the hardware bus
@@ -63,9 +64,10 @@ def temperatureAndHumidity():
 threshold = 10
 
 # def getLatitudeLongitude():
-#     response = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA')  
+#     response = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA')
 #     resp_json_payload = response.json()
 #     print(resp_json_payload['results'][0]['geometry']['location'])
+
 
 def getSunriseSunset():
     latitude = 43.37
@@ -76,23 +78,28 @@ def getSunriseSunset():
     # Get today's sunrise and sunset in UTC
     today_sr = sun.get_sunrise_time()
     today_ss = sun.get_sunset_time()
-    return {"sunrise": today_sr, "sunset":today_ss}
+    return {"sunrise": today_sr, "sunset": today_ss}
     # print('Today at Warsaw the sun raised at {} and get down at {} UTC'.
     #   format(today_sr.strftime('%H:%M'), today_ss.strftime('%H:%M')))
 
+
 def isSunrise(sunrise):
     # Récupérer l'heure actuelle
-    current_time = datetime.datetime.now().time()
-    afterSunrise = sunrise + datetime.timedelta(minutes = 30)
-
+    current_time = datetime.datetime.now()
+    current_time = pytz.utc.localize(current_time)
+    afterSunrise = sunrise + datetime.timedelta(minutes=30)
+    print(type(current_time))
     return current_time < afterSunrise and current_time >= sunrise
+
 
 def isSunset(sunset):
     # Récupérer l'heure actuelle
-    current_time = datetime.datetime.now().time()
-    beforeSunset = sunset - datetime.timedelta(minutes = 30)
+    current_time = datetime.datetime.now()
+    current_time = pytz.utc.localize(current_time)
+    beforeSunset = sunset - datetime.timedelta(minutes=30)
 
     return current_time > beforeSunset and current_time <= sunset
+
 
 def light():
     try:
@@ -132,20 +139,20 @@ def buttonDetection():
 
 def main():
     # if(movementDetection()):
-        while(True):
-            # tempAndHum = temperatureAndHumidity()
-            # temp = tempAndHum[0]
-            # hum = tempAndHum[1]
-            # print("temp = %.02f C humidity = %.02f%%" % (temp, hum))
-            sensor_value = light()
-            setText("sensor_value = " + str(sensor_value))
-            # print("sensor_value = %d resistance = %.2f" %
-            #   (sensor_value,  resistance))
+    while(True):
+        # tempAndHum = temperatureAndHumidity()
+        # temp = tempAndHum[0]
+        # hum = tempAndHum[1]
+        # print("temp = %.02f C humidity = %.02f%%" % (temp, hum))
+        meteo = light()
+        setText(meteo)
+        # print("sensor_value = %d resistance = %.2f" %
+        #   (sensor_value,  resistance))
 
-            # if(buttonDetection2()) { 2eme boutton poussoire
-            #     Changer l'affichage du lcd
-            # }
-            time.sleep(30)
+        # if(buttonDetection2()) { 2eme boutton poussoire
+        #     Changer l'affichage du lcd
+        # }
+        time.sleep(30)
 
 
 main()

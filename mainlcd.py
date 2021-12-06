@@ -3,7 +3,7 @@
 from driverI2C import *
 import time
 
-setText("Coucouc nui")
+setText("A TOI MON PTIT SUCRE LYAN")
 #setRGB(0,128,64)
 time.sleep(2)
 
