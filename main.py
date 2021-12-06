@@ -81,10 +81,18 @@ def getSunriseSunset():
     #   format(today_sr.strftime('%H:%M'), today_ss.strftime('%H:%M')))
 
 def isSunrise(sunrise):
+    # Récupérer l'heure actuelle
+    current_time = datetime.datetime.now().time()
+    afterSunrise = sunrise + datetime.timedelta(minutes = 30)
 
+    return current_time < afterSunrise and current_time >= sunrise
 
 def isSunset(sunset):
+    # Récupérer l'heure actuelle
+    current_time = datetime.datetime.now().time()
+    beforeSunset = sunset - datetime.timedelta(minutes = 30)
 
+    return current_time > beforeSunset and current_time <= sunset
 
 def light():
     try:
