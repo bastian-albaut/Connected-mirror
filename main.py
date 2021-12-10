@@ -143,12 +143,21 @@ def requestSensor():
         "weather" : light(),
     }
 
+def displayInformations(data):
+    setText(data["temperature"])
+    setText(data["humidity"])
+    setText(data["weather"])
+
+
 def main():
     while(movementDetection()):
+        # Récupération des données via les capteurs
         data = requestSensor()
 
+        # Affichage des données
+        displayInformations(data)
+
         # print("temp = %.02f C humidity = %.02f%%" % (temp, hum))
-        # setText(meteo)
 
         time.sleep(30)
 
