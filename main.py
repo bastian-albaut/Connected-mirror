@@ -48,7 +48,6 @@ def movementDetection():
 blue = 0    # The Blue colored sensor.
 white = 1   # The White colored sensor.
 
-
 def temperatureAndHumidity():
     try:
         # This example uses the blue colored sensor.
@@ -136,24 +135,25 @@ def buttonDetection():
         time.sleep(0.5)  # don't overload the i2c bus
     return True
 
+def requestSensor():
+    tempAndHum = temperatureAndHumidity()
+    return {
+        "temperature" : tempAndHum[0],
+        "humidity" : tempAndHum[1],
+        "weather" : light(),
+    }
 
 def main():
-    # if(movementDetection()):
-    while(True):
-        # tempAndHum = temperatureAndHumidity()
-        # temp = tempAndHum[0]
-        # hum = tempAndHum[1]
-        # print("temp = %.02f C humidity = %.02f%%" % (temp, hum))
-        meteo = light()
-        setText(meteo)
-        # print("sensor_value = %d resistance = %.2f" %
-        #   (sensor_value,  resistance))
+    while(movementDetection()):
+        data = requestSensor()
 
-        # if(buttonDetection2()) { 2eme boutton poussoire
-        #     Changer l'affichage du lcd
-        # }
+        # print("temp = %.02f C humidity = %.02f%%" % (temp, hum))
+        # setText(meteo)
+
         time.sleep(30)
+
+    if(buttonDetection()):
+        setRGB(15,227,20) # Affichage en vert
 
 
 main()
-# getLatitudeLongitude()
