@@ -116,6 +116,23 @@ def light():
     except IOError:
         print("Error")
 
+def traffic():
+    homeAdress = "Montpellier"
+    workAdress = "Toulouse"
+    key = "AIzaSyDFPpnVB6UO9Zu2rbDvGP-scDnakK_dFd8"
+    url = "https://maps.googleapis.com/maps/api/distancematrix/json?"
+    request = requests.get(url + "origins=" + homeAdress + "&destinations=" + workAdress + "&language=fr" + "&key=" + key)
+
+    return request.json()["rows"][0]["elements"][0]["duration"]["text"]
+
+def getData():
+    tempAndHum = temperatureAndHumidity()
+    return {
+        "temperature" : tempAndHum[0],
+        "humidity" : tempAndHum[1],
+        "weather" : light(),
+        "traffic" : traffic(),
+    }
 
 def pushButton():
     try:
@@ -135,24 +152,17 @@ def buttonDetection():
         time.sleep(0.5)  # don't overload the i2c bus
     return True
 
-def requestSensor():
-    tempAndHum = temperatureAndHumidity()
-    return {
-        "temperature" : tempAndHum[0],
-        "humidity" : tempAndHum[1],
-        "weather" : light(),
-    }
 
 def displayInformations(data):
     setText(data["temperature"])
-    setText(data["humidity"])
     setText(data["weather"])
-
+    setText(data["humidity"])
+    setText(data["traffic"])
 
 def main():
     while(movementDetection()):
         # Récupération des données via les capteurs
-        data = requestSensor()
+        data = getData()
 
         # Affichage des données
         displayInformations(data)
