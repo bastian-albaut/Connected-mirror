@@ -5,7 +5,7 @@ import time
 
 setText("A TOI MON PTIT SUCRE LYAN")
 #setRGB(0,128,64)
-time.sleep(2)
+time.sleep(10)
 
 # for c in range(0,200):
 	# setRGB(c,200-c,0)

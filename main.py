@@ -6,7 +6,7 @@ from suntime import Sun, SunTimeException
 import requests
 from driverI2C import *
 import pytz
-
+import random
 
 # set I2C to use the hardware bus
 grovepi.set_bus("RPI_1")
@@ -36,7 +36,7 @@ def movementDetection():
     dist1 = distance()
     while not mvtDetected:
         dist2 = distance()
-        print("Distance mesurée = %.1f cm" % dist2)
+        # print("Distance mesurée = %.1f cm" % dist2)
         if(abs(dist1-dist2) > 25):
             mvtDetected = True
         time.sleep(0.1)  # don't overload the i2c bus
@@ -47,6 +47,7 @@ def movementDetection():
 # Grove Base Kit comes with the blue sensor.
 blue = 0    # The Blue colored sensor.
 white = 1   # The White colored sensor.
+
 
 def temperatureAndHumidity():
     try:
@@ -107,7 +108,6 @@ def light():
         sunriseAndSunset = getSunriseSunset()
 
         sensor_value = grovepi.analogRead(light_sensor)
-
         if(sensor_value > 15000 or (sensor_value > 350 and (isSunrise(sunriseAndSunset["sunrise"]) or isSunset(sunriseAndSunset["sunset"])))):
             return "Soleil"
         else:
@@ -116,23 +116,25 @@ def light():
     except IOError:
         print("Error")
 
-def traffic():
-    homeAdress = "Montpellier"
-    workAdress = "Toulouse"
-    key = "AIzaSyDFPpnVB6UO9Zu2rbDvGP-scDnakK_dFd8"
-    url = "https://maps.googleapis.com/maps/api/distancematrix/json?"
-    request = requests.get(url + "origins=" + homeAdress + "&destinations=" + workAdress + "&language=fr" + "&key=" + key)
+# def traffic():
+#     homeAdress = "Montpellier"
+#     workAdress = "Toulouse"
+#     key = "AIzaSyDFPpnVB6UO9Zu2rbDvGP-scDnakK_dFd8"
+#     url = "https://maps.googleapis.com/maps/api/distancematrix/json?"
+#     request = requests.get(url + "origins=" + homeAdress + "&destinations=" + workAdress + "&language=fr" + "&key=" + key)
 
-    return request.json()["rows"][0]["elements"][0]["duration"]["text"]
+#     return request.json()["rows"][0]["elements"][0]["duration"]["text"]
+
 
 def getData():
     tempAndHum = temperatureAndHumidity()
     return {
-        "temperature" : tempAndHum[0],
-        "humidity" : tempAndHum[1],
-        "weather" : light(),
-        "traffic" : traffic(),
+        "temperature": tempAndHum[0],
+        "humidity": tempAndHum[1],
+        "weather": light(),
+        # "traffic" : traffic(),
     }
+
 
 def pushButton():
     try:
@@ -154,14 +156,27 @@ def buttonDetection():
 
 
 def displayInformations(data):
-    setText(data["temperature"])
+    # print("temperature: %.02f" % data["temperature"])
+    # setText("temperature: %.02f \n" % data["temperature"] + "degres")
+    print(data["weather"])
     setText(data["weather"])
-    setText(data["humidity"])
-    setText(data["traffic"])
+    # setText(data["humidity"])
+    # setText(data["traffic"])
+    time.sleep(5)
+
+
+def changerCouleur():
+    r = random.randint(0, 255)
+    g = random.randint(0, 255)
+    b = random.randint(0, 255)
+    setRGB(r, g, b)
+
 
 def main():
+    # if(movementDetection()):
     while(movementDetection()):
-        # Récupération des données via les capteurs
+        # movementDetection()
+        # Récupération des données via les capteurs/api
         data = getData()
 
         # Affichage des données
@@ -169,10 +184,10 @@ def main():
 
         # print("temp = %.02f C humidity = %.02f%%" % (temp, hum))
 
-        time.sleep(30)
+        time.sleep(1)
 
-    if(buttonDetection()):
-        setRGB(15,227,20) # Affichage en vert
+    # if(buttonDetection()):
+    #     changerCouleur()
 
 
 main()

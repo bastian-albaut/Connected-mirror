@@ -115,7 +115,7 @@ def buttonDetection():
 
 
 def main():
-    # if(movementDetection()):
+    if(movementDetection()):
         while(True):
             # tempAndHum = temperatureAndHumidity()
             # temp = tempAndHum[0]
