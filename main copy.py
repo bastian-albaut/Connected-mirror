@@ -29,6 +29,11 @@ def distance():
     except Exception as e:
         print("Error:{}".format(e))
 
+filin = open("/home/pi/Documents/miroir/config.txt", "r")
+lignes = filin.readlines()
+lignes
+for ligne in lignes:
+    print(ligne)
 
 def movementDetection():
     mvtDetected = False

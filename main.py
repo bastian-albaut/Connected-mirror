@@ -108,22 +108,28 @@ def light():
         sunriseAndSunset = getSunriseSunset()
 
         sensor_value = grovepi.analogRead(light_sensor)
-        if(sensor_value > 15000 or (sensor_value > 350 and (isSunrise(sunriseAndSunset["sunrise"]) or isSunset(sunriseAndSunset["sunset"])))):
-            return "Soleil"
+        if(sensor_value > 10000 or (sensor_value > 350 and (isSunrise(sunriseAndSunset["sunrise"]) or isSunset(sunriseAndSunset["sunset"])))):
+            return "Ensoleillé"
         else:
-            return "Nuage"
+            return "Nuageux"
 
     except IOError:
         print("Error")
 
-# def traffic():
-#     homeAdress = "Montpellier"
-#     workAdress = "Toulouse"
-#     key = "AIzaSyDFPpnVB6UO9Zu2rbDvGP-scDnakK_dFd8"
-#     url = "https://maps.googleapis.com/maps/api/distancematrix/json?"
-#     request = requests.get(url + "origins=" + homeAdress + "&destinations=" + workAdress + "&language=fr" + "&key=" + key)
 
-#     return request.json()["rows"][0]["elements"][0]["duration"]["text"]
+def traffic():
+    homeAdress = "Montpellier"
+    workAdress = "Sciez"
+    key = "AIzaSyDFPpnVB6UO9Zu2rbDvGP-scDnakK_dFd8"
+    url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + \
+        homeAdress + "&destinations=" + workAdress + "&language=fr" + "&key=" + key
+
+    payload = {}
+    headers = {}
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    return response.json()["rows"][0]["elements"][0]["duration"]["text"]
 
 
 def getData():
@@ -132,8 +138,20 @@ def getData():
         "temperature": tempAndHum[0],
         "humidity": tempAndHum[1],
         "weather": light(),
-        # "traffic" : traffic(),
+        "traffic": traffic(),
     }
+
+
+def getDataClient():
+    filin = open("/home/pi/Documents/miroir/config.txt", "r")
+    lignes = filin.readlines()
+    i = 1
+    data = ""
+    for ligne in lignes:
+        if i % 2 == 0:
+            data += ligne
+        i += 1
+    return data
 
 
 def pushButton():
@@ -156,13 +174,17 @@ def buttonDetection():
 
 
 def displayInformations(data):
-    # print("temperature: %.02f" % data["temperature"])
-    # setText("temperature: %.02f \n" % data["temperature"] + "degres")
-    print(data["weather"])
-    setText(data["weather"])
-    # setText(data["humidity"])
-    # setText(data["traffic"])
-    time.sleep(5)
+    print("temperature:%.02f" % data["temperature"])
+    setText("temperature:%.02f" % data["temperature"])
+    time.sleep(4)
+    print("Meteo:" + data["weather"])
+    setText("Meteo:" + data["weather"])
+    time.sleep(4)
+    print("Humidite:%.02f" % data["humidity"])
+    setText("Humidite:%.02f" % data["humidity"])
+    time.sleep(4)
+    print("Temps trajet:" + data["traffic"])
+    setText("Temps trajet:" + data["traffic"])
 
 
 def changerCouleur():
@@ -173,21 +195,19 @@ def changerCouleur():
 
 
 def main():
-    # if(movementDetection()):
-    while(movementDetection()):
-        # movementDetection()
+    if(movementDetection()):
         # Récupération des données via les capteurs/api
         data = getData()
 
         # Affichage des données
         displayInformations(data)
 
-        # print("temp = %.02f C humidity = %.02f%%" % (temp, hum))
+        dataClient = getDataClient()
+        print(dataClient)
 
-        time.sleep(1)
-
-    # if(buttonDetection()):
-    #     changerCouleur()
+    while(True):
+        if(buttonDetection()):
+            changerCouleur()
 
 
 main()
