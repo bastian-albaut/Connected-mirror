@@ -119,7 +119,7 @@ def light():
 
 def traffic():
     homeAdress = "Montpellier"
-    workAdress = "Sciez"
+    workAdress = "Metz"
     key = "AIzaSyDFPpnVB6UO9Zu2rbDvGP-scDnakK_dFd8"
     url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + \
         homeAdress + "&destinations=" + workAdress + "&language=fr" + "&key=" + key
@@ -195,15 +195,14 @@ def changerCouleur():
 
 
 def main():
+    dataClient = getDataClient()
+    print(dataClient)
     if(movementDetection()):
         # Récupération des données via les capteurs/api
         data = getData()
 
         # Affichage des données
         displayInformations(data)
-
-        dataClient = getDataClient()
-        print(dataClient)
 
     while(True):
         if(buttonDetection()):
