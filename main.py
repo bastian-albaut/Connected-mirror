@@ -7,6 +7,7 @@ import requests
 from driverI2C import *
 import pytz
 import random
+from google_trans_new import google_translator
 
 # set I2C to use the hardware bus
 grovepi.set_bus("RPI_1")
@@ -131,22 +132,38 @@ def traffic(homeAdress, workAdress):
 
     return response.json()["rows"][0]["elements"][0]["duration"]["text"]
 
+
 def randomQuote():
-	try:
-		## making the get request
-		response = requests.get("https://quote-garden.herokuapp.com/api/v3/quotes/random")
-		if response.status_code == 200:
-			## extracting the core data
-			json_data = response.json()
-			data = json_data['data']
+    # try:
+        # making the get request
+        response = requests.get(
+            "https://quote-garden.herokuapp.com/api/v3/quotes/random")
+        if response.status_code == 200:
+            # extracting the core data
+            json_data = response.json()
+            data = json_data['data']
 
-			## getting the quote from the data
-			print(data[0]['quoteText'])
-		else:
-			print("Error while getting quote")
-	except:
-		print("Something went wrong! Try Again!")
+            print(data[0]['quoteText'])
+            print(type(data[0]['quoteText']))
+            
+            # translator = Translator()
+            # dt1 = translator.detect(data[0]['quoteText'])
+            # print(dt1)
 
+            translator = google_translator()  
+            translate_text = translator.translate('michel',lang_tgt='en')  
+            print(translate_text)
+
+
+            # traduction = translator.translate(data[0]['quoteText'])
+            # data[0] = traduction.text
+            
+            # getting the quote from the data
+            print(data[0]['quoteText'])
+        else:
+            print("Error while getting quote")
+    # except:
+    #     print("Something went wrong! Try Again!")
 
 
 def getData(homeAdress, workAdress):
