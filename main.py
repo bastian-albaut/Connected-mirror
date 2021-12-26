@@ -33,13 +33,15 @@ def distance():
 
 def movementDetection():
     mvtDetected = False
+    print("En attente d'un mouvement...")
     dist1 = distance()
+    print("Distance de départ = %.1f cm" % dist1)
     while not mvtDetected:
         dist2 = distance()
-        # print("Distance mesurée = %.1f cm" % dist2)
-        if(abs(dist1-dist2) > 25):
+        print("Distance mesurée = %.1f cm" % dist2)
+        if(abs(dist1-dist2) > 40):
             mvtDetected = True
-        time.sleep(0.1)  # don't overload the i2c bus
+        time.sleep(0.5)  # don't overload the i2c bus
     return True
 
 
@@ -117,9 +119,7 @@ def light():
         print("Error")
 
 
-def traffic():
-    homeAdress = "Montpellier"
-    workAdress = "Metz"
+def traffic(homeAdress, workAdress):
     key = "AIzaSyDFPpnVB6UO9Zu2rbDvGP-scDnakK_dFd8"
     url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + \
         homeAdress + "&destinations=" + workAdress + "&language=fr" + "&key=" + key
@@ -131,14 +131,31 @@ def traffic():
 
     return response.json()["rows"][0]["elements"][0]["duration"]["text"]
 
+def randomQuote():
+	try:
+		## making the get request
+		response = requests.get("https://quote-garden.herokuapp.com/api/v3/quotes/random")
+		if response.status_code == 200:
+			## extracting the core data
+			json_data = response.json()
+			data = json_data['data']
 
-def getData():
+			## getting the quote from the data
+			print(data[0]['quoteText'])
+		else:
+			print("Error while getting quote")
+	except:
+		print("Something went wrong! Try Again!")
+
+
+
+def getData(homeAdress, workAdress):
     tempAndHum = temperatureAndHumidity()
     return {
         "temperature": tempAndHum[0],
         "humidity": tempAndHum[1],
         "weather": light(),
-        "traffic": traffic(),
+        "traffic": traffic(homeAdress, workAdress),
     }
 
 
@@ -196,10 +213,11 @@ def changerCouleur():
 
 def main():
     dataClient = getDataClient()
-    print(dataClient)
+    homeAdress = dataClient.splitlines()[0]
+    workAdress = dataClient.splitlines()[1]
     if(movementDetection()):
         # Récupération des données via les capteurs/api
-        data = getData()
+        data = getData(homeAdress, workAdress)
 
         # Affichage des données
         displayInformations(data)
@@ -209,4 +227,4 @@ def main():
             changerCouleur()
 
 
-main()
+randomQuote()
