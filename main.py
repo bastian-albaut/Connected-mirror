@@ -7,7 +7,8 @@ import requests
 from driverI2C import *
 import pytz
 import random
-from google_trans_new import google_translator
+from googletrans import Translator
+
 
 # set I2C to use the hardware bus
 grovepi.set_bus("RPI_1")
@@ -134,37 +135,25 @@ def traffic(homeAdress, workAdress):
 
 
 def randomQuote():
-    # try:
-        # making the get request
-        response = requests.get(
-            "https://quote-garden.herokuapp.com/api/v3/quotes/random")
-        if response.status_code == 200:
-            # extracting the core data
-            json_data = response.json()
-            data = json_data['data']
+    # making the get request
+    response = requests.get(
+        "https://quote-garden.herokuapp.com/api/v3/quotes/random")
+    if response.status_code == 200:
+        # extracting the core data
+        json_data = response.json()
+        data = json_data['data']
 
-            print(data[0]['quoteText'])
-            print(type(data[0]['quoteText']))
-            
-            # translator = Translator()
-            # dt1 = translator.detect(data[0]['quoteText'])
-            # print(dt1)
+        translator = Translator()
+        translate_text = translator.translate(data[0]['quoteText'],dest='fr')
+        random_quote = translate_text.text
+        author = data[0]['quoteAuthor']
 
-            translator = google_translator()  
-            translate_text = translator.translate('michel',lang_tgt='en')  
-            print(translate_text)
-
-
-            # traduction = translator.translate(data[0]['quoteText'])
-            # data[0] = traduction.text
-            
-            # getting the quote from the data
-            print(data[0]['quoteText'])
-        else:
-            print("Error while getting quote")
-    # except:
-    #     print("Something went wrong! Try Again!")
-
+        return {
+            "citation": random_quote,
+            "auteur": author
+        }
+    else:
+        print("Error while getting quote")
 
 def getData(homeAdress, workAdress):
     tempAndHum = temperatureAndHumidity()
@@ -173,6 +162,7 @@ def getData(homeAdress, workAdress):
         "humidity": tempAndHum[1],
         "weather": light(),
         "traffic": traffic(homeAdress, workAdress),
+        "quoteWithAuthor": randomQuote()
     }
 
 
@@ -208,6 +198,11 @@ def buttonDetection():
 
 
 def displayInformations(data):
+    print("Citation: " + data["quoteWithAuthor"]["citation"])
+    print("Auteur: " + data["quoteWithAuthor"]["auteur"])
+    setText("Citation: " + data["quoteWithAuthor"]["citation"])
+    setText("Auteur: " + data["quoteWithAuthor"]["auteur"])
+    time.sleep(4)
     print("temperature:%.02f" % data["temperature"])
     setText("temperature:%.02f" % data["temperature"])
     time.sleep(4)
@@ -244,4 +239,4 @@ def main():
             changerCouleur()
 
 
-randomQuote()
+main()
