@@ -158,23 +158,24 @@ def randomQuote():
 
 
 def dayNews():
-    conn = http.client.HTTPConnection('api.mediastack.com')
+    numberofNews = str(3)
+    key = "1947a8a49b8a3d3adb51d97d8f458c1d"
+    url = "http://api.mediastack.com/v1/news?access_key=" + \
+        key + "&countries=fr&languages=fr&sort=published_desc&limit=" + \
+        numberofNews
 
-    params = urllib.parse.urlencode({
-        'access_key': '1947a8a49b8a3d3adb51d97d8f458c1d',
-        # 'categories': '-general,-sports',
-        'countries': 'fr',
-        'keywords': 'technologie','informatique'
-        'sort': 'published_desc',
-        'limit': 3,
-        })
+    response = requests.request("GET", url)
 
-    conn.request('GET', '/v1/news?{}'.format(params))
+    listNews = {}
+    for i in range(0, 3):
+        listNews["news{0}".format(i)] = {
+            "titre": response.json()["data"][i]["title"],
+            "description": response.json()["data"][i]["description"],
+            "image": response.json()["data"][i]["image"],
+            "source": response.json()["data"][i]["source"]
+        }
 
-    res = conn.getresponse()
-    data = res.read()
-
-    print(data.decode('utf-8'))
+    return listNews
 
 
 def getData(homeAdress, workAdress):
@@ -184,7 +185,8 @@ def getData(homeAdress, workAdress):
         "humidity": tempAndHum[1],
         "weather": light(),
         "traffic": traffic(homeAdress, workAdress),
-        "quoteWithAuthor": randomQuote()
+        "quoteWithAuthor": randomQuote(),
+        "listNews": dayNews()
     }
 
 
@@ -220,6 +222,12 @@ def buttonDetection():
 
 
 def displayInformations(data):
+    print("News:")
+    setText("News:")
+    print(data["listNews"]["news0"]["titre"] + "\n" + data["listNews"]["news0"]["description"])
+    print(data["listNews"]["news1"]["titre"] + "\n" + data["listNews"]["news1"]["description"])
+    print(data["listNews"]["news2"]["titre"] + "\n" + data["listNews"]["news2"]["description"])
+    time.sleep(4)
     print("Citation: " + data["quoteWithAuthor"]["citation"])
     print("Auteur: " + data["quoteWithAuthor"]["auteur"])
     setText("Citation: " + data["quoteWithAuthor"]["citation"])
@@ -260,4 +268,4 @@ def main():
         if(buttonDetection()):
             changerCouleur()
 
-dayNews()
+main()
