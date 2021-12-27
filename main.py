@@ -8,6 +8,7 @@ from driverI2C import *
 import pytz
 import random
 from googletrans import Translator
+import http.client, urllib.parse
 
 
 # set I2C to use the hardware bus
@@ -155,6 +156,27 @@ def randomQuote():
     else:
         print("Error while getting quote")
 
+
+def dayNews():
+    conn = http.client.HTTPConnection('api.mediastack.com')
+
+    params = urllib.parse.urlencode({
+        'access_key': '1947a8a49b8a3d3adb51d97d8f458c1d',
+        # 'categories': '-general,-sports',
+        'countries': 'fr',
+        'keywords': 'technologie','informatique'
+        'sort': 'published_desc',
+        'limit': 3,
+        })
+
+    conn.request('GET', '/v1/news?{}'.format(params))
+
+    res = conn.getresponse()
+    data = res.read()
+
+    print(data.decode('utf-8'))
+
+
 def getData(homeAdress, workAdress):
     tempAndHum = temperatureAndHumidity()
     return {
@@ -238,5 +260,4 @@ def main():
         if(buttonDetection()):
             changerCouleur()
 
-
-main()
+dayNews()
