@@ -137,16 +137,14 @@ def traffic(homeAdress, workAdress):
 def randomQuote():
     # making the get request
     response = requests.get(
-        "https://quote-garden.herokuapp.com/api/v3/quotes/random")
+        "http://api.quotable.io/random?maxLength=120")
     if response.status_code == 200:
         # extracting the core data
-        json_data = response.json()
-        data = json_data['data']
-
+        data = response.json()
         translator = Translator()
-        translate_text = translator.translate(data[0]['quoteText'],dest='fr')
+        translate_text = translator.translate(data['content'],dest='fr')
         random_quote = translate_text.text
-        author = data[0]['quoteAuthor']
+        author = data['author']
 
         return {
             "quote": random_quote,
@@ -278,7 +276,7 @@ def main():
     # Récupération des données via les capteurs/api
     data = getData(homeAdress, workAdress)
 
-    # Affichage des données
+    # Affichage des données sur le lcd
     # displayInformations(data)
 
     # Création de l'app web et affichage
