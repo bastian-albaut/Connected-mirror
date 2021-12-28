@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+
+<head>
+    <link href="{{ url_for('static', filename='stylesheets/styles.css') }}" rel="stylesheet" />
+    <title>Mirroir connecté</title>
+</head>
+
+<body>
+    <div class="wrapper">
+
+        <div class="container">
+            <div class="news">
+                <p>
+                    {{ data.listNews.news0.title }}
+                    {{ data.listNews.news0.description }}
+                </p>
+                <p>
+                    {{ data.listNews.news1.title }}
+                    {{ data.listNews.news1.description }}
+                </p>
+                <p>
+                    {{ data.listNews.news1.title }}
+                    {{ data.listNews.news1.description }}
+                </p>
+            </div>
+
+            <div class="otherInformations">
+                <p>
+                    20h30 <br/>
+                    15 décembre 2021 <br/>
+                    Météo : {{ data.weather }} <br/>
+                    Température : {{ data.temperature }} <br/>
+                    Humidité : {{ data.humidity }} <br/>
+                    Temps de trajet pour aller au travail : {{ data.traffic }}
+                <p>
+            </div>
+        </div>
+
+        <div class="quote">
+            <h1>
+                {{ data.quoteWithAuthor.quote }}
+                {{ data.quoteWithAuthor.author }}
+            </h1>
+        </div>
+    </div>
+
+</body>
+
+</html>

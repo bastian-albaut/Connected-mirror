@@ -8,8 +8,7 @@ from driverI2C import *
 import pytz
 import random
 from googletrans import Translator
-import http.client, urllib.parse
-
+from flask import Flask, render_template
 
 # set I2C to use the hardware bus
 grovepi.set_bus("RPI_1")
@@ -150,8 +149,8 @@ def randomQuote():
         author = data[0]['quoteAuthor']
 
         return {
-            "citation": random_quote,
-            "auteur": author
+            "quote": random_quote,
+            "author": author
         }
     else:
         print("Error while getting quote")
@@ -169,7 +168,7 @@ def dayNews():
     listNews = {}
     for i in range(0, 3):
         listNews["news{0}".format(i)] = {
-            "titre": response.json()["data"][i]["title"],
+            "title": response.json()["data"][i]["title"],
             "description": response.json()["data"][i]["description"],
             "image": response.json()["data"][i]["image"],
             "source": response.json()["data"][i]["source"]
@@ -224,14 +223,14 @@ def buttonDetection():
 def displayInformations(data):
     print("News:")
     setText("News:")
-    print(data["listNews"]["news0"]["titre"] + "\n" + data["listNews"]["news0"]["description"])
-    print(data["listNews"]["news1"]["titre"] + "\n" + data["listNews"]["news1"]["description"])
-    print(data["listNews"]["news2"]["titre"] + "\n" + data["listNews"]["news2"]["description"])
+    print(data["listNews"]["news0"]["title"] + "\n" + data["listNews"]["news0"]["description"])
+    print(data["listNews"]["news1"]["title"] + "\n" + data["listNews"]["news1"]["description"])
+    print(data["listNews"]["news2"]["title"] + "\n" + data["listNews"]["news2"]["description"])
     time.sleep(4)
-    print("Citation: " + data["quoteWithAuthor"]["citation"])
-    print("Auteur: " + data["quoteWithAuthor"]["auteur"])
-    setText("Citation: " + data["quoteWithAuthor"]["citation"])
-    setText("Auteur: " + data["quoteWithAuthor"]["auteur"])
+    print("Citation: " + data["quoteWithAuthor"]["quote"])
+    print("Auteur: " + data["quoteWithAuthor"]["author"])
+    setText("Citation: " + data["quoteWithAuthor"]["quote"])
+    setText("Auteur: " + data["quoteWithAuthor"]["author"])
     time.sleep(4)
     print("temperature:%.02f" % data["temperature"])
     setText("temperature:%.02f" % data["temperature"])
@@ -246,7 +245,23 @@ def displayInformations(data):
     setText("Temps trajet:" + data["traffic"])
 
 
-def changerCouleur():
+def flaskApplication(data):
+
+    print("Affichage de l'écran sur le mirroir en cours...")
+    # setText("Affichage de l'écran sur le mirroir en cours...")
+
+    app = Flask(__name__)
+
+    @app.route('/')
+    @app.route('/index')
+    def index():
+        return render_template('index.html', data=data)
+
+    if __name__ == "__main__":
+        app.run()
+
+
+def setColor():
     r = random.randint(0, 255)
     g = random.randint(0, 255)
     b = random.randint(0, 255)
@@ -257,15 +272,15 @@ def main():
     dataClient = getDataClient()
     homeAdress = dataClient.splitlines()[0]
     workAdress = dataClient.splitlines()[1]
-    if(movementDetection()):
-        # Récupération des données via les capteurs/api
-        data = getData(homeAdress, workAdress)
+    setColor()
+    # if(movementDetection()):
+    # Récupération des données via les capteurs/api
+    data = getData(homeAdress, workAdress)
 
-        # Affichage des données
-        displayInformations(data)
+    # Affichage des données
+    # displayInformations(data)
 
-    while(True):
-        if(buttonDetection()):
-            changerCouleur()
+    # Création de l'app web et affichage
+    flaskApplication(data)
 
 main()
