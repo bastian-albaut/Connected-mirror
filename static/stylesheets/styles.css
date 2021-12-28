@@ -1,14 +1,21 @@
 * {
     margin: 0;
     padding: 0;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #444;
   }
 
 p, h1 {
     color: white;
 }
 
+h1 {
+    font-size: 22px;
+    font-family: 'Archivo Black', sans-serif;
+}
+
+p {
+    font-size: 20px;
+    font-family: 'Roboto', sans-serif;
+}
 
 body {
     height: 100vh;
@@ -17,6 +24,7 @@ body {
 .wrapper {
     background-color: black;
     height: 100%;
+    padding: 0 15px 0 15px;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -27,21 +35,53 @@ body {
     flex-direction: row;
     justify-content: space-between;
     height: 30%;
+    margin-bottom: 3%;
 }
 
 .news {
-    background-color: pink;
+    /* background-color: pink; */
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+}
+
+.news > p {
+    margin: auto;
+}
+
+.otherInformations {
+    display: flex;
+    /* background-color: blue; */
     width: 30%;
 }
 
+.otherInformations > p {
+    margin: auto;
+    text-align: center;
+    line-height: 2;
+}
 
-.otherInformations {
-    background-color: blue;
-    width: 30%;
+.otherInformations i {
+    color: white;
+    font-size: 40px;
+}
+
+#temperature {
+    font-size: 40px;
 }
 
 .quote {
-    background-color: red;
+    /* background-color: red; */
     height: 10%;
     text-align: center;
+}
+
+.quote h1 {
+    font-style: italic;
+    font-size: 40px;
+    font-family: 'Pushster', cursive;
+}
+
+.quote p {
+    font-style: bold;
 }

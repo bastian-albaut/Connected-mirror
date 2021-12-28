@@ -3,7 +3,11 @@
 
 <head>
     <link href="{{ url_for('static', filename='stylesheets/styles.css') }}" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Pushster&family=Roboto&display=swap" rel="stylesheet"> 
     <title>Mirroir connecté</title>
+    <script src="https://kit.fontawesome.com/d4008cf7a0.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -11,27 +15,35 @@
 
         <div class="container">
             <div class="news">
+                <h1>Dernieres actualités:</h1>
+                <!-- <img src={{ data.listNews.news0.image }} alt={{ data.listNews.news0.title }}> -->
                 <p>
-                    {{ data.listNews.news0.title }}
-                    {{ data.listNews.news0.description }}
+                    <!-- {{ data.listNews.news0.image }} -->
+                    {{ data.listNews.news0.title }} <br />
+                    <!-- {{ data.listNews.news0.description }} -->
                 </p>
+                <hr>
                 <p>
-                    {{ data.listNews.news1.title }}
-                    {{ data.listNews.news1.description }}
+                    {{ data.listNews.news1.title }} <br />
+                    <!-- {{ data.listNews.news1.description }} -->
                 </p>
+                <hr>
                 <p>
-                    {{ data.listNews.news1.title }}
-                    {{ data.listNews.news1.description }}
+                    {{ data.listNews.news1.title }} <br />
+                    <!-- {{ data.listNews.news1.description }} -->
                 </p>
             </div>
 
             <div class="otherInformations">
                 <p>
-                    20h30 <br/>
-                    15 décembre 2021 <br/>
-                    Météo : {{ data.weather }} <br/>
-                    Température : {{ data.temperature }} <br/>
-                    Humidité : {{ data.humidity }} <br/>
+                    {{ data.datetime }} <br />
+                    {% if data.weather == "Nuageux" %}
+                    <i class="fas fa-cloud"></i>
+                    {% else %}
+                    <i class="fas fa-sun"></i>
+                    {% endif %}
+                    <span id="temperature">{{ data.temperature }}°C</span>
+                    Humidité : {{ data.humidity }}% <br />
                     Temps de trajet pour aller au travail : {{ data.traffic }}
                 <p>
             </div>
@@ -40,8 +52,10 @@
         <div class="quote">
             <h1>
                 {{ data.quoteWithAuthor.quote }}
-                {{ data.quoteWithAuthor.author }}
             </h1>
+            <p>
+                {{ data.quoteWithAuthor.author }}
+            </p>
         </div>
     </div>
 

@@ -173,7 +173,7 @@ def dayNews():
             "image": response.json()["data"][i]["image"],
             "source": response.json()["data"][i]["source"]
         }
-
+        print(listNews["news0"]["image"])
     return listNews
 
 
@@ -185,7 +185,8 @@ def getData(homeAdress, workAdress):
         "weather": light(),
         "traffic": traffic(homeAdress, workAdress),
         "quoteWithAuthor": randomQuote(),
-        "listNews": dayNews()
+        "listNews": dayNews(),
+        "datetime": datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
     }
 
 
