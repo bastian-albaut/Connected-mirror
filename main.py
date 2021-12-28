@@ -281,4 +281,4 @@ def main():
     # Création de l'app web et affichage
     flaskApplication(data, colorClient)
 
-dayNews()
+main()

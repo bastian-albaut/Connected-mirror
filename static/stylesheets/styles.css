@@ -94,3 +94,8 @@ body {
 .quote p {
     font-style: bold;
 }
+
+hr {
+    width: 20%;
+    margin: auto;
+}
