@@ -66,8 +66,17 @@ body {
     font-size: 40px;
 }
 
+#datetime {
+    font-weight: bold;
+    font-size: 23px
+}
+
 #temperature {
     font-size: 40px;
+}
+
+#humidity {
+    margin-left: 10px;
 }
 
 .quote {
@@ -78,8 +87,8 @@ body {
 
 .quote h1 {
     font-style: italic;
-    font-size: 40px;
-    font-family: 'Pushster', cursive;
+    font-size: 30px;
+    font-family: 'Vollkorn', serif;
 }
 
 .quote p {

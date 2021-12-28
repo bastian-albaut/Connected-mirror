@@ -5,7 +5,7 @@
     <link href="{{ url_for('static', filename='stylesheets/styles.css') }}" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Pushster&family=Roboto&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Roboto&family=Vollkorn:ital@1&display=swap" rel="stylesheet"> 
     <title>Mirroir connecté</title>
     <script src="https://kit.fontawesome.com/d4008cf7a0.js" crossorigin="anonymous"></script>
 </head>
@@ -15,19 +15,19 @@
 
         <div class="container">
             <div class="news">
-                <h1>Dernieres actualités:</h1>
+                <h1 style="color:{{ color }}" >Dernieres actualités:</h1>
                 <!-- <img src={{ data.listNews.news0.image }} alt={{ data.listNews.news0.title }}> -->
                 <p>
                     <!-- {{ data.listNews.news0.image }} -->
                     {{ data.listNews.news0.title }} <br />
                     <!-- {{ data.listNews.news0.description }} -->
                 </p>
-                <hr>
+                <hr style="color:{{ color }}" >
                 <p>
                     {{ data.listNews.news1.title }} <br />
                     <!-- {{ data.listNews.news1.description }} -->
                 </p>
-                <hr>
+                <hr style="color:{{ color }}">
                 <p>
                     {{ data.listNews.news1.title }} <br />
                     <!-- {{ data.listNews.news1.description }} -->
@@ -35,15 +35,15 @@
             </div>
 
             <div class="otherInformations">
-                <p>
-                    {{ data.datetime }} <br />
+                <p>  
+                    <span id="datetime" style="color:{{ color }}">{{ data.datetime }}</span> <br />
                     {% if data.weather == "Nuageux" %}
                     <i class="fas fa-cloud"></i>
                     {% else %}
                     <i class="fas fa-sun"></i>
                     {% endif %}
                     <span id="temperature">{{ data.temperature }}°C</span>
-                    Humidité : {{ data.humidity }}% <br />
+                    <span id="humidity"></span>Humidité : {{ data.humidity }}% </span> <br />
                     Temps de trajet pour aller au travail : {{ data.traffic }}
                 <p>
             </div>

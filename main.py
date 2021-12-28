@@ -162,7 +162,6 @@ def dayNews():
         numberofNews
 
     response = requests.request("GET", url)
-
     listNews = {}
     for i in range(0, 3):
         listNews["news{0}".format(i)] = {
@@ -171,7 +170,6 @@ def dayNews():
             "image": response.json()["data"][i]["image"],
             "source": response.json()["data"][i]["source"]
         }
-        print(listNews["news0"]["image"])
     return listNews
 
 
@@ -244,7 +242,7 @@ def displayInformations(data):
     setText("Temps trajet:" + data["traffic"])
 
 
-def flaskApplication(data):
+def flaskApplication(data, colorClient):
 
     print("Affichage de l'écran sur le mirroir en cours...")
     # setText("Affichage de l'écran sur le mirroir en cours...")
@@ -254,7 +252,7 @@ def flaskApplication(data):
     @app.route('/')
     @app.route('/index')
     def index():
-        return render_template('index.html', data=data)
+        return render_template('index.html', data=data, color=colorClient)
 
     if __name__ == "__main__":
         app.run()
@@ -271,6 +269,7 @@ def main():
     dataClient = getDataClient()
     homeAdress = dataClient.splitlines()[0]
     workAdress = dataClient.splitlines()[1]
+    colorClient = dataClient.splitlines()[2]
     setColor()
     # if(movementDetection()):
     # Récupération des données via les capteurs/api
@@ -280,6 +279,6 @@ def main():
     # displayInformations(data)
 
     # Création de l'app web et affichage
-    flaskApplication(data)
+    flaskApplication(data, colorClient)
 
-main()
+dayNews()

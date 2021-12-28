@@ -1,7 +1,7 @@
 Adresse de domicile:
 Montpellier 
 Adresse de travail:
-Khemisset  
-Couleur principale:
-
+Toulouse  
+Couleur principale: (en hexadécimal: #FFFFF par exemple)
+#ffc502
 Quelle domaine de nouvelle voulez vous ?
