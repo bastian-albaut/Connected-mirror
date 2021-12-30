@@ -3,12 +3,11 @@
     padding: 0;
   }
 
-p, h1 {
+p, h1, h2 {
     color: white;
 }
 
 h1 {
-    font-size: 22px;
     font-family: 'Archivo Black', sans-serif;
 }
 
@@ -34,7 +33,7 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    height: 30%;
+    height: 40%;
     margin-bottom: 3%;
 }
 
@@ -45,8 +44,19 @@ body {
     flex-direction: column;
 }
 
+.news > h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.news > h2 {
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
 .news > p {
     margin: auto;
+    padding-left: 10px;
 }
 
 .otherInformations {

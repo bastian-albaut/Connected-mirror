@@ -142,7 +142,7 @@ def randomQuote():
         # extracting the core data
         data = response.json()
         translator = Translator()
-        translate_text = translator.translate(data['content'],dest='fr')
+        translate_text = translator.translate(data['content'], dest='fr')
         random_quote = translate_text.text
         author = data['author']
 
@@ -154,26 +154,32 @@ def randomQuote():
         print("Error while getting quote")
 
 
-def dayNews():
-    numberofNews = str(3)
+def dayNews(categoryNews):
+    numberofNews = 2
     key = "1947a8a49b8a3d3adb51d97d8f458c1d"
     url = "http://api.mediastack.com/v1/news?access_key=" + \
-        key + "&countries=fr&languages=fr&sort=published_desc&limit=" + \
-        numberofNews
+        key + "&countries=fr&languages=fr&sort=published_desc&categories=-" + \
+        categoryNews
 
     response = requests.request("GET", url)
     listNews = {}
-    for i in range(0, 3):
-        listNews["news{0}".format(i)] = {
-            "title": response.json()["data"][i]["title"],
-            "description": response.json()["data"][i]["description"],
-            "image": response.json()["data"][i]["image"],
-            "source": response.json()["data"][i]["source"]
-        }
+    i = 0
+    n = 0
+    while(i < numberofNews):
+        if response.json()["data"][n]["title"] != response.json()["data"][n]["description"]:
+            listNews["news{0}".format(i)] = {
+                "title": response.json()["data"][n]["title"],
+                "description": response.json()["data"][n]["description"],
+                "image": response.json()["data"][n]["image"],
+                "source": response.json()["data"][n]["source"]
+            }
+            i += 1
+        n += 1
+
     return listNews
 
 
-def getData(homeAdress, workAdress):
+def getData(homeAdress, workAdress, categoryNews):
     tempAndHum = temperatureAndHumidity()
     return {
         "temperature": tempAndHum[0],
@@ -181,7 +187,7 @@ def getData(homeAdress, workAdress):
         "weather": light(),
         "traffic": traffic(homeAdress, workAdress),
         "quoteWithAuthor": randomQuote(),
-        "listNews": dayNews(),
+        "listNews": dayNews(categoryNews),
         "datetime": datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
     }
 
@@ -220,26 +226,27 @@ def buttonDetection():
 def displayInformations(data):
     print("News:")
     setText("News:")
-    print(data["listNews"]["news0"]["title"] + "\n" + data["listNews"]["news0"]["description"])
-    print(data["listNews"]["news1"]["title"] + "\n" + data["listNews"]["news1"]["description"])
-    print(data["listNews"]["news2"]["title"] + "\n" + data["listNews"]["news2"]["description"])
-    time.sleep(4)
-    print("Citation: " + data["quoteWithAuthor"]["quote"])
-    print("Auteur: " + data["quoteWithAuthor"]["author"])
-    setText("Citation: " + data["quoteWithAuthor"]["quote"])
-    setText("Auteur: " + data["quoteWithAuthor"]["author"])
-    time.sleep(4)
-    print("temperature:%.02f" % data["temperature"])
-    setText("temperature:%.02f" % data["temperature"])
-    time.sleep(4)
-    print("Meteo:" + data["weather"])
-    setText("Meteo:" + data["weather"])
-    time.sleep(4)
-    print("Humidite:%.02f" % data["humidity"])
-    setText("Humidite:%.02f" % data["humidity"])
-    time.sleep(4)
-    print("Temps trajet:" + data["traffic"])
-    setText("Temps trajet:" + data["traffic"])
+    print(data["listNews"]["news0"]["title"] + "\n" +
+          data["listNews"]["news0"]["description"])
+    print(data["listNews"]["news1"]["title"] + "\n" +
+          data["listNews"]["news1"]["description"])
+    # time.sleep(4)
+    # print("Citation: " + data["quoteWithAuthor"]["quote"])
+    # print("Auteur: " + data["quoteWithAuthor"]["author"])
+    # setText("Citation: " + data["quoteWithAuthor"]["quote"])
+    # setText("Auteur: " + data["quoteWithAuthor"]["author"])
+    # time.sleep(4)
+    # print("temperature:%.02f" % data["temperature"])
+    # setText("temperature:%.02f" % data["temperature"])
+    # time.sleep(4)
+    # print("Meteo:" + data["weather"])
+    # setText("Meteo:" + data["weather"])
+    # time.sleep(4)
+    # print("Humidite:%.02f" % data["humidity"])
+    # setText("Humidite:%.02f" % data["humidity"])
+    # time.sleep(4)
+    # print("Temps trajet:" + data["traffic"])
+    # setText("Temps trajet:" + data["traffic"])
 
 
 def flaskApplication(data, colorClient):
@@ -270,15 +277,18 @@ def main():
     homeAdress = dataClient.splitlines()[0]
     workAdress = dataClient.splitlines()[1]
     colorClient = dataClient.splitlines()[2]
+    categoryNews = dataClient.splitlines()[3]
+    print(categoryNews)
     setColor()
     # if(movementDetection()):
     # Récupération des données via les capteurs/api
-    data = getData(homeAdress, workAdress)
+    data = getData(homeAdress, workAdress, categoryNews)
 
     # Affichage des données sur le lcd
-    # displayInformations(data)
+    displayInformations(data)
 
     # Création de l'app web et affichage
     flaskApplication(data, colorClient)
+
 
 main()

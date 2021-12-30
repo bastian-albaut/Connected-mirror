@@ -1,7 +1,8 @@
 Adresse de domicile:
-Montpellier 
+1278 Route de Ganges, Montpellier 
 Adresse de travail:
-Toulouse  
+Place Eugène Bataillon, Montpellier  
 Couleur principale: (en hexadécimal: #FFFFF par exemple)
 #ffc502
-Quelle domaine de nouvelle voulez vous ?
+Quel domaine d'actualité voulez-vous exclure ? general/business/entertainment/health/science/sports/technology (Si vide: Toutes les actualités)
+technology
