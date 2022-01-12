@@ -9,6 +9,8 @@ import pytz
 import random
 from googletrans import Translator
 from flask import Flask, render_template
+import webbrowser
+from threading import Timer
 
 # set I2C to use the hardware bus
 grovepi.set_bus("RPI_1")
@@ -92,7 +94,6 @@ def isSunrise(sunrise):
     current_time = datetime.datetime.now()
     current_time = pytz.utc.localize(current_time)
     afterSunrise = sunrise + datetime.timedelta(minutes=30)
-    print(type(current_time))
     return current_time < afterSunrise and current_time >= sunrise
 
 
@@ -112,7 +113,7 @@ def light():
         sunriseAndSunset = getSunriseSunset()
 
         sensor_value = grovepi.analogRead(light_sensor)
-        if(sensor_value > 10000 or (sensor_value > 350 and (isSunrise(sunriseAndSunset["sunrise"]) or isSunset(sunriseAndSunset["sunset"])))):
+        if(sensor_value > 500 or (sensor_value > 350 and (isSunrise(sunriseAndSunset["sunrise"]) or isSunset(sunriseAndSunset["sunset"])))):
             return "Ensoleillé"
         else:
             return "Nuageux"
@@ -225,27 +226,27 @@ def buttonDetection():
 
 def displayInformations(data):
     print("News:")
-    setText("News:")
+    # setText("News:")
     print(data["listNews"]["news0"]["title"] + "\n" +
           data["listNews"]["news0"]["description"])
     print(data["listNews"]["news1"]["title"] + "\n" +
           data["listNews"]["news1"]["description"])
     # time.sleep(4)
-    # print("Citation: " + data["quoteWithAuthor"]["quote"])
-    # print("Auteur: " + data["quoteWithAuthor"]["author"])
+    print("Citation: " + data["quoteWithAuthor"]["quote"])
+    print("Auteur: " + data["quoteWithAuthor"]["author"])
     # setText("Citation: " + data["quoteWithAuthor"]["quote"])
     # setText("Auteur: " + data["quoteWithAuthor"]["author"])
     # time.sleep(4)
-    # print("temperature:%.02f" % data["temperature"])
+    print("temperature:%.02f" % data["temperature"])
     # setText("temperature:%.02f" % data["temperature"])
     # time.sleep(4)
-    # print("Meteo:" + data["weather"])
+    print("Meteo:" + data["weather"])
     # setText("Meteo:" + data["weather"])
     # time.sleep(4)
-    # print("Humidite:%.02f" % data["humidity"])
+    print("Humidite:%.02f" % data["humidity"])
     # setText("Humidite:%.02f" % data["humidity"])
     # time.sleep(4)
-    # print("Temps trajet:" + data["traffic"])
+    print("Temps trajet:" + data["traffic"])
     # setText("Temps trajet:" + data["traffic"])
 
 
@@ -262,7 +263,8 @@ def flaskApplication(data, colorClient):
         return render_template('index.html', data=data, color=colorClient)
 
     if __name__ == "__main__":
-        app.run()
+        Timer(1, webbrowser.open_new('http://127.0.0.1:5000/')).start()
+        app.run(port=5000)
 
 
 def setColor():
@@ -278,17 +280,16 @@ def main():
     workAdress = dataClient.splitlines()[1]
     colorClient = dataClient.splitlines()[2]
     categoryNews = dataClient.splitlines()[3]
-    print(categoryNews)
     setColor()
-    # if(movementDetection()):
-    # Récupération des données via les capteurs/api
-    data = getData(homeAdress, workAdress, categoryNews)
+    if(movementDetection()):
+        # Récupération des données via les capteurs/api
+        data = getData(homeAdress, workAdress, categoryNews)
 
-    # Affichage des données sur le lcd
-    displayInformations(data)
+        # Affichage des données sur le lcd
+        displayInformations(data)
 
-    # Création de l'app web et affichage
-    flaskApplication(data, colorClient)
+        # Création de l'app web et affichage
+        flaskApplication(data, colorClient)
 
 
 main()
