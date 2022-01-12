@@ -106,7 +106,7 @@ def isSunset(sunset):
     return current_time > beforeSunset and current_time <= sunset
 
 
-def light(homeAdress):
+def weather(homeAdress):
     try:
         # Récupérer l'humidité pour ajouter la pluie
 
@@ -185,7 +185,7 @@ def getData(homeAdress, workAdress, categoryNews):
     return {
         "temperature": tempAndHum[0],
         "humidity": tempAndHum[1],
-        "weather": light(homeAdress),
+        "weather": weather(homeAdress),
         "traffic": traffic(homeAdress, workAdress),
         "quoteWithAuthor": randomQuote(),
         "listNews": dayNews(categoryNews),
