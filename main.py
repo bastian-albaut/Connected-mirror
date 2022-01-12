@@ -74,7 +74,6 @@ def getLatitudeLongitude(homeAdress):
     response = requests.get('https://maps.googleapis.com/maps/api/geocode/json?key=' + key + '&address=' + homeAdress)
     resp_json_payload = response.json()
     location = resp_json_payload['results'][0]['geometry']['location']
-    print(location)
     return {
         "Latitude" : location['lat'],
         "Longitude" : location['lng']
@@ -82,15 +81,12 @@ def getLatitudeLongitude(homeAdress):
 
 def getSunriseSunset(homeAdress):
     location = getLatitudeLongitude(homeAdress)
-    print(location)
     sun = Sun(location["Latitude"], location["Longitude"])
 
     # Get today's sunrise and sunset in UTC
     today_sr = sun.get_sunrise_time()
     today_ss = sun.get_sunset_time()
     return {"sunrise": today_sr, "sunset": today_ss}
-    # print('Today at Warsaw the sun raised at {} and get down at {} UTC'.
-    #   format(today_sr.strftime('%H:%M'), today_ss.strftime('%H:%M')))
 
 
 def isSunrise(sunrise):
