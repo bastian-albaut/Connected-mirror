@@ -43,7 +43,7 @@ def movementDetection():
     while not mvtDetected:
         dist2 = distance()
         print("Distance mesurée = %.1f cm" % dist2)
-        if(abs(dist1-dist2) > 40):
+        if(abs(dist1-dist2) > 100):
             mvtDetected = True
         time.sleep(0.5)  # don't overload the i2c bus
     return True
@@ -69,17 +69,21 @@ def temperatureAndHumidity():
 # Turn on LED once sensor exceeds threshold resistance
 threshold = 10
 
-# def getLatitudeLongitude():
-#     response = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA')
-#     resp_json_payload = response.json()
-#     print(resp_json_payload['results'][0]['geometry']['location'])
+def getLatitudeLongitude(homeAdress):
+    key = "AIzaSyDFPpnVB6UO9Zu2rbDvGP-scDnakK_dFd8"
+    response = requests.get('https://maps.googleapis.com/maps/api/geocode/json?key=' + key + '&address=' + homeAdress)
+    resp_json_payload = response.json()
+    location = resp_json_payload['results'][0]['geometry']['location']
+    print(location)
+    return {
+        "Latitude" : location['lat'],
+        "Longitude" : location['lng']
+    }
 
-
-def getSunriseSunset():
-    latitude = 43.37
-    longitude = 03.52
-
-    sun = Sun(latitude, longitude)
+def getSunriseSunset(homeAdress):
+    location = getLatitudeLongitude(homeAdress)
+    print(location)
+    sun = Sun(location["Latitude"], location["Longitude"])
 
     # Get today's sunrise and sunset in UTC
     today_sr = sun.get_sunrise_time()
@@ -106,11 +110,11 @@ def isSunset(sunset):
     return current_time > beforeSunset and current_time <= sunset
 
 
-def light():
+def light(homeAdress):
     try:
         # Récupérer l'humidité pour ajouter la pluie
 
-        sunriseAndSunset = getSunriseSunset()
+        sunriseAndSunset = getSunriseSunset(homeAdress)
 
         sensor_value = grovepi.analogRead(light_sensor)
         if(sensor_value > 500 or (sensor_value > 350 and (isSunrise(sunriseAndSunset["sunrise"]) or isSunset(sunriseAndSunset["sunset"])))):
@@ -185,7 +189,7 @@ def getData(homeAdress, workAdress, categoryNews):
     return {
         "temperature": tempAndHum[0],
         "humidity": tempAndHum[1],
-        "weather": light(),
+        "weather": light(homeAdress),
         "traffic": traffic(homeAdress, workAdress),
         "quoteWithAuthor": randomQuote(),
         "listNews": dayNews(categoryNews),
