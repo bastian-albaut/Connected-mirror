@@ -1,8 +1,8 @@
 Adresse de domicile: (Compléter à la ligne)
 1278 Route de Ganges, Montpellier 
 Adresse de travail: (Compléter à la ligne)
-Place Eugène Bataillon, Montpellier  
+Toulouse
 Couleur principale: (en hexadécimal: #FFFFF par exemple) (Compléter à la ligne)
-#ffc502
+#ff02f3
 Quel domaine d'actualité voulez-vous exclure ? general/business/entertainment/health/science/sports/technology (Si vide: Toutes les actualités) (Compléter à la ligne)
 technology

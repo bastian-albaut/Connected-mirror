@@ -69,15 +69,18 @@ def temperatureAndHumidity():
 # Turn on LED once sensor exceeds threshold resistance
 threshold = 10
 
+
 def getLatitudeLongitude(homeAdress):
     key = "AIzaSyDFPpnVB6UO9Zu2rbDvGP-scDnakK_dFd8"
-    response = requests.get('https://maps.googleapis.com/maps/api/geocode/json?key=' + key + '&address=' + homeAdress)
+    response = requests.get(
+        'https://maps.googleapis.com/maps/api/geocode/json?key=' + key + '&address=' + homeAdress)
     resp_json_payload = response.json()
     location = resp_json_payload['results'][0]['geometry']['location']
     return {
-        "Latitude" : location['lat'],
-        "Longitude" : location['lng']
+        "Latitude": location['lat'],
+        "Longitude": location['lng']
     }
+
 
 def getSunriseSunset(homeAdress):
     location = getLatitudeLongitude(homeAdress)
@@ -194,7 +197,7 @@ def getData(homeAdress, workAdress, categoryNews):
 
 
 def getDataClient():
-    filin = open("/home/pi/Documents/miroir/config.txt", "r")
+    filin = open("./config.txt", "r")
     lignes = filin.readlines()
     i = 1
     data = ""
