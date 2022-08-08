@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <link href="{{ url_for('static', filename='stylesheets/styles.css') }}" rel="stylesheet" />
+    <link href="../static/stylesheets/styles.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -17,45 +17,45 @@
 
         <div class="container">
             <div class="news">
-                <h1 style="color:{{ color }}">Dernières actualités:</h1>
+                <h1 style="color:#FFBB33">Dernières actualités:</h1>
                 <h2>
-                    {{ data.listNews.news0.title }}
+                    Rugby : la Nouvelle-Zélande s'incline
                 </h2>
                 <p>
-                    {{ data.listNews.news0.description }}
+                    La mauvaise passe continue pour les All Blacks. Lors de la première journée du Rugby Championship, samedi, la Nouvelle-Zélande s'est ainsi nettement inclinée en Afrique du Sud (26-10).
                 </p>
-                <hr style="color:{{ color }}">
+                <hr style="color:#FFBB33">
                 <h2>
-                    {{ data.listNews.news1.title }}
+                    Culture : Festival de musiques du monde à Sète
                 </h2>
                 <p>
-                    {{ data.listNews.news1.description }}
+                    Marjorie Adelson est au Festival de musique du monde Fiest'A'Sète. Elle nous présente le musicien angolais Bonga, qui lui parle de sa longue carrière.
                 </p>
             </div>
 
             <div class="otherInformations">
                 <p>
-                    <span id="datetime" style="color:{{ color }}">{{ data.datetime }}</span> <br />
-                    {% if data.weather == "Nuageux" %}
-                    <i class="fas fa-cloud"></i>
-                    {% else %}
+                    <span id="datetime" style="color: #FFBB33">08/08/22 13:43</span> <br />
+                    <!-- {% if data.weather == "Nuageux" %} -->
+                    <!-- <i class="fas fa-cloud"></i>
+                    {% else %} -->
                     <i class="fas fa-sun"></i>
-                    {% endif %}
-                    <span id="temperature">{{ data.temperature }}°C</span>
-                    <span id="humidity"></span>Humidité : {{ data.humidity }}% </span> <br />
+                    <!-- {% endif %} -->
+                    <span id="temperature">35°C</span>
+                    <span id="humidity"></span>Humidité : 22% </span> <br />
                     Temps de trajet domicile-travail :<br />
                     <i class="fas fa-route"></i>
-                    {{ data.traffic }}
+                    18 minutes
                 <p>
             </div>
         </div>
 
         <div class="quote">
             <h1>
-                {{ data.quoteWithAuthor.quote }}
+                Esprit moqueur, petit esprit. La moquerie est la fiente de l'esprit critique.
             </h1>
             <p>
-                {{ data.quoteWithAuthor.author }}
+                Pierre Reverdy
             </p>
         </div>
     </div>
