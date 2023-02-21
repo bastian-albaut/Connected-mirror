@@ -1,5 +1,5 @@
 Adresse de domicile: (Compléter à la ligne)
-1278 Route de Ganges, Montpellier 
+Montpellier
 Adresse de travail: (Compléter à la ligne)
 Toulouse
 Couleur principale: (en hexadécimal: #FFFFF par exemple) (Compléter à la ligne)
