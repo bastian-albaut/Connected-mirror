@@ -3,7 +3,7 @@
 The Connected Mirror is a device that allows its user to be informed every day of various informations:
 
 - Date and hour
-- Weather: Suoralnshine, Temperature and Humidity
+- Weather: Sunshine, Temperature and Humidity
 - Real-time commuting time home-work
 - News of the day
 - Random motivational quote
