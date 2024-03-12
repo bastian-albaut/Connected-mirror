@@ -1,1 +1,0 @@
-Pour utiliser votre Miroir Connecté, veuillez suivre les informations indiquées dans le manuel utilisateur fourni.
